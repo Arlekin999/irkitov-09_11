@@ -1,0 +1,27 @@
+[plugin] загружен mermaid (mermaid_export.py)
+Activity Diagram:
+AcceptRequest -> CheckLimit
+CheckLimit -> Approve (if amount <= limit)
+CheckLimit -> Review (if NOT amount <= limit)
+Approve -> SendResponse
+Review -> CheckLimit
+ClosedLoopA -> ClosedLoopB
+ClosedLoopB -> ClosedLoopA
+
+Анализ activity_cycle.json:
+Начальные узлы: AcceptRequest
+Цикл: CheckLimit -> Review -> CheckLimit
+Цикл: ClosedLoopA -> ClosedLoopB -> ClosedLoopA
+Недостижимые шаги: ClosedLoopA, ClosedLoopB
+Тупиковые узлы: SendResponse
+Порядок выполнения: не определён (граф содержит циклы)
+Предупреждения:
+  - Обнаружен цикл: CheckLimit -> Review
+  - Обнаружен цикл: ClosedLoopA -> ClosedLoopB
+  - Шаг недостижим из начального узла: ClosedLoopA
+  - Шаг недостижим из начального узла: ClosedLoopB
+  - Тупиковый узел без исходящих переходов (ожидался финальный шаг): SendResponse
+  - Топологическая сортировка невозможна: граф содержит циклы
+
+Отчёт сохранён: demo/activity-cycle/activity-diagram.md
+

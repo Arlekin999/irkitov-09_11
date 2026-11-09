@@ -1,0 +1,35 @@
+flowchart TD
+    Start["Start"]
+    ValidateCart["ValidateCart"]
+    ReserveStock["ReserveStock"]
+    ChargeCard["ChargeCard"]
+    RetryPayment["RetryPayment"]
+    FulfillOrder["FulfillOrder"]
+    ShipOrder["ShipOrder"]
+    SendReceipt["SendReceipt"]
+    NotifyRetry["NotifyRetry"]
+    ShowEmptyCart["ShowEmptyCart"]
+    NotifyOutOfStock["NotifyOutOfStock"]
+    CancelOrder["CancelOrder"]
+    EndSuccess["EndSuccess"]
+    EndRetry["EndRetry"]
+    EndEmpty["EndEmpty"]
+    EndOutOfStock["EndOutOfStock"]
+    EndCancelled["EndCancelled"]
+    Start --> ValidateCart
+    ValidateCart -->|cart.items > 0 AND NOT customer.blocked| ReserveStock
+    ValidateCart -.->|NOT (cart.items > 0 AND NOT customer.blocked)| ShowEmptyCart
+    ReserveStock -->|stock.available == true OR stock.backorder == true| ChargeCard
+    ReserveStock -.->|NOT (stock.available == true OR stock.backorder == true)| NotifyOutOfStock
+    ChargeCard -->|payment.status == 'paid'| FulfillOrder
+    ChargeCard -.->|NOT (payment.status == 'paid')| RetryPayment
+    RetryPayment -->|attempts < 3| NotifyRetry
+    RetryPayment -.->|NOT (attempts < 3)| CancelOrder
+    FulfillOrder --> ShipOrder
+    FulfillOrder --> SendReceipt
+    ShipOrder --> EndSuccess
+    SendReceipt --> EndSuccess
+    NotifyRetry --> EndRetry
+    ShowEmptyCart --> EndEmpty
+    NotifyOutOfStock --> EndOutOfStock
+    CancelOrder --> EndCancelled

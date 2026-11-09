@@ -1,0 +1,21 @@
+{
+  "activity": [
+    {"step": "Start", "next": "ValidateCart"},
+    {"step": "ValidateCart", "condition": "cart.items > 0 AND NOT customer.blocked", "true": "ReserveStock", "false": "ShowEmptyCart"},
+    {"step": "ReserveStock", "condition": "stock.available == true OR stock.backorder == true", "true": "ChargeCard", "false": "NotifyOutOfStock"},
+    {"step": "ChargeCard", "condition": "payment.status == 'paid'", "true": "FulfillOrder", "false": "RetryPayment"},
+    {"step": "RetryPayment", "condition": "attempts < 3", "true": "NotifyRetry", "false": "CancelOrder"},
+    {"step": "FulfillOrder", "next": ["ShipOrder", "SendReceipt"]},
+    {"step": "ShipOrder", "next": "EndSuccess"},
+    {"step": "SendReceipt", "next": "EndSuccess"},
+    {"step": "NotifyRetry", "next": "EndRetry"},
+    {"step": "ShowEmptyCart", "next": "EndEmpty"},
+    {"step": "NotifyOutOfStock", "next": "EndOutOfStock"},
+    {"step": "CancelOrder", "next": "EndCancelled"},
+    {"step": "EndSuccess", "next": []},
+    {"step": "EndRetry", "next": []},
+    {"step": "EndEmpty", "next": []},
+    {"step": "EndOutOfStock", "next": []},
+    {"step": "EndCancelled", "next": []}
+  ]
+}

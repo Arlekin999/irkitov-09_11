@@ -1,0 +1,15 @@
+flowchart TD
+    AcceptRequest["AcceptRequest"]
+    CheckLimit["CheckLimit"]
+    Approve["Approve"]
+    Review["Review"]
+    SendResponse["SendResponse"]
+    ClosedLoopA["ClosedLoopA"]
+    ClosedLoopB["ClosedLoopB"]
+    AcceptRequest --> CheckLimit
+    CheckLimit -->|amount <= limit| Approve
+    CheckLimit -.->|NOT (amount <= limit)| Review
+    Approve --> SendResponse
+    Review --> CheckLimit
+    ClosedLoopA --> ClosedLoopB
+    ClosedLoopB --> ClosedLoopA

@@ -1,0 +1,87 @@
+[plugin] загружен mermaid (mermaid_export.py)
+REPL диаграмм. Введите help для списка команд.
+> Загружен sequence_checkout.json (sequence)
+Загружен activity_branching.json (activity)
+Загружен activity_cycle.json (activity)
+> sequence_checkout.json: документ корректен
+activity_branching.json: документ корректен
+activity_cycle.json: документ корректен
+> Sequence Diagram:
+Customer -> OrderService: SubmitOrder(items: 3, total: 149.90)
+OrderService -> PaymentGateway: Authorize(card: **** 4242, amount: 149.90)
+PaymentGateway -> OrderService: Approve(transaction: TX-778)
+OrderService -> Warehouse: ReserveStock()
+Warehouse -> OrderService: ConfirmReservation(reservation: R-42)
+OrderService -> Customer: SendConfirmation(channel: email)
+
+> Activity Diagram:
+Start -> ValidateCart
+ValidateCart -> ReserveStock (if cart.items > 0 AND NOT customer.blocked)
+ValidateCart -> ShowEmptyCart (if NOT (cart.items > 0 AND NOT customer.blocked))
+ReserveStock -> ChargeCard (if stock.available == true OR stock.backorder == true)
+ReserveStock -> NotifyOutOfStock (if NOT (stock.available == true OR stock.backorder == true))
+ChargeCard -> FulfillOrder (if payment.status == 'paid')
+ChargeCard -> RetryPayment (if NOT payment.status == 'paid')
+RetryPayment -> NotifyRetry (if attempts < 3)
+RetryPayment -> CancelOrder (if NOT attempts < 3)
+FulfillOrder -> ShipOrder
+FulfillOrder -> SendReceipt
+ShipOrder -> EndSuccess
+SendReceipt -> EndSuccess
+NotifyRetry -> EndRetry
+ShowEmptyCart -> EndEmpty
+NotifyOutOfStock -> EndOutOfStock
+CancelOrder -> EndCancelled
+
+Activity Diagram:
+AcceptRequest -> CheckLimit
+CheckLimit -> Approve (if amount <= limit)
+CheckLimit -> Review (if NOT amount <= limit)
+Approve -> SendResponse
+Review -> CheckLimit
+ClosedLoopA -> ClosedLoopB
+ClosedLoopB -> ClosedLoopA
+
+> Анализ activity_branching.json:
+Начальные узлы: Start
+Циклы: не обнаружены
+Недостижимые шаги: нет
+Тупиковые узлы: EndSuccess, EndRetry, EndEmpty, EndOutOfStock, EndCancelled
+Порядок выполнения: Start -> ValidateCart -> ReserveStock -> ShowEmptyCart -> ChargeCard -> NotifyOutOfStock -> EndEmpty -> FulfillOrder -> RetryPayment -> EndOutOfStock -> ShipOrder -> SendReceipt -> NotifyRetry -> CancelOrder -> EndSuccess -> EndRetry -> EndCancelled
+Предупреждения: нет
+
+Анализ activity_cycle.json:
+Начальные узлы: AcceptRequest
+Цикл: CheckLimit -> Review -> CheckLimit
+Цикл: ClosedLoopA -> ClosedLoopB -> ClosedLoopA
+Недостижимые шаги: ClosedLoopA, ClosedLoopB
+Тупиковые узлы: SendResponse
+Порядок выполнения: не определён (граф содержит циклы)
+Предупреждения:
+  - Обнаружен цикл: CheckLimit -> Review
+  - Обнаружен цикл: ClosedLoopA -> ClosedLoopB
+  - Шаг недостижим из начального узла: ClosedLoopA
+  - Шаг недостижим из начального узла: ClosedLoopB
+  - Тупиковый узел без исходящих переходов (ожидался финальный шаг): SendResponse
+  - Топологическая сортировка невозможна: граф содержит циклы
+
+> sequenceDiagram
+    participant Customer
+    participant OrderService
+    participant PaymentGateway
+    participant Warehouse
+    Customer->>OrderService: SubmitOrder(items: 3, total: 149.90)
+    OrderService->>PaymentGateway: Authorize(card: **** 4242, amount: 149.90)
+    PaymentGateway->>OrderService: Approve(transaction: TX-778)
+    OrderService->>Warehouse: ReserveStock
+    Warehouse->>OrderService: ConfirmReservation(reservation: R-42)
+    OrderService->>Customer: SendConfirmation(channel: email)
+Сохранено: demo/repl/sequence-diagram.mmd
+
+> Загруженные плагины: mermaid
+exporters: mermaid
+validators: нет
+> Сохранено: demo/repl/sequence-diagram.md
+Сохранено: demo/repl/activity-diagram.md
+Сохранено: demo/repl/activity-diagram.md
+> Выход.

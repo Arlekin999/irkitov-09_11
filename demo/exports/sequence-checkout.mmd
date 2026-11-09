@@ -1,0 +1,11 @@
+sequenceDiagram
+    participant Customer
+    participant OrderService
+    participant PaymentGateway
+    participant Warehouse
+    Customer->>OrderService: SubmitOrder(items: 3, total: 149.90)
+    OrderService->>PaymentGateway: Authorize(card: **** 4242, amount: 149.90)
+    PaymentGateway->>OrderService: Approve(transaction: TX-778)
+    OrderService->>Warehouse: ReserveStock
+    Warehouse->>OrderService: ConfirmReservation(reservation: R-42)
+    OrderService->>Customer: SendConfirmation(channel: email)

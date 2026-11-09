@@ -1,0 +1,7 @@
+{
+  "sequence": [
+    {"actor": "Customer", "action": "PlaceOrder", "target": "OrderSystem", "parameters": ["item: Milk", "quantity: 2"]},
+    {"actor": "OrderSystem", "action": "CreateOrder", "target": "Order", "parameters": ["id: 123", "items: [Milk]"]},
+    {"actor": "Order", "action": "ProcessPayment", "target": "PaymentGateway", "parameters": ["amount: 50"]}
+  ]
+}

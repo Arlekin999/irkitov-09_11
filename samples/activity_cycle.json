@@ -1,0 +1,11 @@
+{
+  "activity": [
+    {"step": "AcceptRequest", "next": "CheckLimit"},
+    {"step": "CheckLimit", "condition": "amount <= limit", "true": "Approve", "false": "Review"},
+    {"step": "Approve", "next": "SendResponse"},
+    {"step": "Review", "next": "CheckLimit"},
+    {"step": "SendResponse", "next": []},
+    {"step": "ClosedLoopA", "next": "ClosedLoopB"},
+    {"step": "ClosedLoopB", "next": "ClosedLoopA"}
+  ]
+}

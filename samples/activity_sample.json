@@ -1,0 +1,8 @@
+{
+  "activity": [
+    {"step": "StartOrderProcessing", "next": "CheckInventory"},
+    {"step": "CheckInventory", "condition": "inventoryAvailable AND NOT blacklisted", "true": "ProcessPayment", "false": "NotifyCustomer"},
+    {"step": "ProcessPayment", "next": "CompleteOrder"},
+    {"step": "NotifyCustomer", "next": "EndOrderProcessing"}
+  ]
+}

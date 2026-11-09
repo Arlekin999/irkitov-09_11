@@ -1,0 +1,9 @@
+load samples/sequence_checkout.json samples/activity_branching.json samples/activity_cycle.json
+validate
+render sequence
+render activity
+analyze
+export mermaid sequence
+plugins
+report
+quit

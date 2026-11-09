@@ -1,0 +1,10 @@
+{
+  "sequence": [
+    {"actor": "Customer", "action": "SubmitOrder", "target": "OrderService", "parameters": ["items: 3", "total: 149.90"]},
+    {"actor": "OrderService", "action": "Authorize", "target": "PaymentGateway", "parameters": ["card: **** 4242", "amount: 149.90"]},
+    {"actor": "PaymentGateway", "action": "Approve", "target": "OrderService", "parameters": ["transaction: TX-778"]},
+    {"actor": "OrderService", "action": "ReserveStock", "target": "Warehouse", "parameters": []},
+    {"actor": "Warehouse", "action": "ConfirmReservation", "target": "OrderService", "parameters": ["reservation: R-42"]},
+    {"actor": "OrderService", "action": "SendConfirmation", "target": "Customer", "parameters": ["channel: email"]}
+  ]
+}
